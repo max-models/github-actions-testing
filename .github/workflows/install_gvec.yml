@@ -37,12 +37,12 @@ jobs:
         shell: bash
         run: |
           brew update
+          brew install cmake
+          brew install netcdf-fortran
+          brew install pkgconf
           brew reinstall gcc # Note: We have to reinstall gcc!
           brew install lapack
-          brew install pkgconf
-          brew install hdf5
-          brew install netcdf-fortran
-          brew install cmake
+          
       - name: Show installed packages
         shell: bash
         run: |
