@@ -37,8 +37,7 @@ jobs:
         shell: bash
         run: |
           brew update
-          brew install gcc
-          brew reinstall gcc
+          brew reinstall gcc # Note: We have to reinstall gcc!
           brew install lapack
           brew install pkgconf
           brew install libomp
