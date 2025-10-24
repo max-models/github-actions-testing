@@ -40,7 +40,6 @@ jobs:
           brew reinstall gcc # Note: We have to reinstall gcc!
           brew install lapack
           brew install pkgconf
-          brew install libomp
           brew install hdf5
           brew install netcdf-fortran
           brew install cmake
