@@ -45,11 +45,6 @@ jobs:
           brew install netcdf-fortran
           brew install cmake
           brew link --overwrite cmake
-          
-          # Update environment variables
-          echo "FC=$(which gfortran)" >> $GITHUB_ENV # for gvec
-          echo "CC=$(which gcc)" >> $GITHUB_ENV # for gvec
-          echo "CXX=$(which g++)" >> $GITHUB_ENV # for gvec
       - name: Show installed packages
         shell: bash
         run: |
