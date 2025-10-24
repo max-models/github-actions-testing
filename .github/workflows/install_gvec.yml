@@ -45,18 +45,23 @@ jobs:
           brew install netcdf-fortran
           brew install cmake
           brew link --overwrite cmake
-          cmake --version 
-          make -v
-          system_profiler SPHardwareDataType
-          which gfortran || echo "could not find gfortran"
-          which gcc || echo "could not find gcc"
-          which g++ || echo "could not find g++"
+          
           # Update environment variables
           echo "FC=$(which gfortran)" >> $GITHUB_ENV # for gvec
           echo "CC=$(which gcc)" >> $GITHUB_ENV # for gvec
           echo "CXX=$(which g++)" >> $GITHUB_ENV # for gvec
-          echo "----------------"
-
+      - name: Show installed packages
+        shell: bash
+        run: |
+          cmake --version 
+          make -v
+          which gfortran || echo "could not find gfortran"
+          which gcc || echo "could not find gcc"
+          which g++ || echo "could not find g++"
+          echo $FC
+          echo $CC
+          echo $CXX
+          
       - name: Install dependencies
         shell: bash
         run: pip install gvec
