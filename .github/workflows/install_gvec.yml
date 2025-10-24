@@ -53,9 +53,6 @@ jobs:
           which gfortran || echo "could not find gfortran"
           which gcc || echo "could not find gcc"
           which g++ || echo "could not find g++"
-          echo $FC
-          echo $CC
-          echo $CXX
           
       - name: Install gvec
         shell: bash
