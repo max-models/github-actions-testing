@@ -1,0 +1,69 @@
+name: Testing
+
+on:
+  push:
+    branches:
+      - main
+      - devel
+  pull_request:
+    branches:
+      - main
+      - devel
+
+jobs:
+  macos-latest:
+    runs-on: macos-latest
+    env:
+      OMPI_MCA_rmaps_base_oversubscribe: 1 # Linux
+      PRRTE_MCA_rmaps_base_oversubscribe: 1 # MacOS
+    
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      # https://docs.github.com/en/actions/tutorials/build-and-test-code/python
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+
+      # You can test your matrix by printing the current Python version
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          # ensure Homebrew bin is first
+          export PATH="/opt/homebrew/bin:$PATH"
+          brew update
+          # brew install python3
+          # brew install gcc
+          brew install openblas
+          brew install lapack
+          brew install open-mpi
+          brew install pkgconf
+          brew install libomp
+          brew install git
+          brew install pandoc
+          brew install hdf5
+          brew install netcdf-fortran
+          brew install cmake
+          brew link --overwrite cmake
+          cmake --version 
+          make -v
+          system_profiler SPHardwareDataType
+          which gfortran || echo "could not find gfortran"
+          which gcc || echo "could not find gcc"
+          which g++ || echo "could not find g++"
+          # Update environment variables
+          echo "FC=$(which gfortran)" >> $GITHUB_ENV # for gvec
+          echo "CC=$(which gcc)" >> $GITHUB_ENV # for gvec
+          echo "CXX=$(which g++)" >> $GITHUB_ENV # for gvec
+          echo "----------------"
+
+      - name: Install dependencies
+        shell: bash
+        run: pip install gvec
