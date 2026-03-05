@@ -1,0 +1,57 @@
+name: Testing
+
+on:
+  push:
+    branches:
+      - main
+      - devel
+  pull_request:
+    branches:
+      - main
+      - devel
+
+jobs:
+  macos-latest:
+    runs-on: macos-latest
+    env:
+      OMPI_MCA_rmaps_base_oversubscribe: 1 # Linux
+      PRRTE_MCA_rmaps_base_oversubscribe: 1 # MacOS
+    
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      # https://docs.github.com/en/actions/tutorials/build-and-test-code/python
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+
+      # You can test your matrix by printing the current Python version
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+
+      # https://gvec.readthedocs.io/latest/user/install.html#prerequisites 
+      - name: Install dependencies
+        shell: bash
+        run: |
+          brew update
+          brew install cmake
+          brew install netcdf-fortran
+          brew install pkgconf
+          brew reinstall gcc # Note: We have to reinstall gcc!
+          brew install lapack
+          
+      - name: Show installed packages
+        shell: bash
+        run: |
+          cmake --version 
+          make -v
+          which gfortran || echo "could not find gfortran"
+          which gcc || echo "could not find gcc"
+          which g++ || echo "could not find g++"
+          
+      - name: Install gvec
+        shell: bash
+        run: pip install gvec
